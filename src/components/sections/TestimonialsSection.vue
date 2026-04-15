@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-vue-next'
@@ -34,7 +34,23 @@ const prevTestimonial = () => {
   currentIndex.value = (currentIndex.value - 1 + testimonials.length) % testimonials.length
 }
 
+let autoplayInterval
+
+const startAutoplay = () => {
+  autoplayInterval = setInterval(() => {
+    nextTestimonial()
+  }, 5000)
+}
+
+const stopAutoplay = () => {
+  if (autoplayInterval) {
+    clearInterval(autoplayInterval)
+  }
+}
+
 onMounted(() => {
+  startAutoplay()
+
   gsap.registerPlugin(ScrollTrigger)
 
   gsap.from(sectionRef.value, {
@@ -48,16 +64,20 @@ onMounted(() => {
     }
   })
 })
+
+onUnmounted(() => {
+  stopAutoplay()
+})
 </script>
 
 <template>
   <section ref="sectionRef" class="py-24 md:py-32 bg-slate-50 dark:bg-luxury-dark overflow-hidden">
     <div class="container mx-auto px-6 md:px-12">
       
-      <div class="max-w-4xl mx-auto text-center relative">
+      <div class="max-w-4xl mx-auto text-center relative" @mouseenter="stopAutoplay" @mouseleave="startAutoplay">
         <Quote class="w-16 h-16 text-luxury-gold/20 mx-auto mb-8 absolute -top-10 left-1/2 -translate-x-1/2" />
         
-        <div class="relative h-[250px] md:h-[200px] overflow-hidden" ref="carouselRef">
+        <div class="relative h-[350px] sm:h-[300px] md:h-[250px] overflow-hidden" ref="carouselRef">
           <transition-group 
             name="slide" 
             tag="div"
@@ -74,13 +94,13 @@ onMounted(() => {
               </p>
               <div>
                 <p class="text-luxury-gold font-semibold uppercase tracking-widest text-sm">{{ t.author }}</p>
-                <p class="text-slate-500 dark:text-gray-500 text-sm mt-1">{{ t.role }}</p>
+                <p class="text-slate-500 dark:text-gray-500 text-sm mt-1 mb-6">{{ t.role }}</p>
               </div>
             </div>
           </transition-group>
         </div>
 
-        <div class="flex items-center justify-center gap-4 mt-12">
+        <div class="flex items-center justify-center gap-4 mt-6">
           <button @click="prevTestimonial" class="p-3 rounded-full border border-slate-200 dark:border-white/10 hover:bg-luxury-gold hover:border-luxury-gold text-slate-700 dark:text-white transition-colors group">
             <ChevronLeft class="w-5 h-5 group-hover:text-white" />
           </button>

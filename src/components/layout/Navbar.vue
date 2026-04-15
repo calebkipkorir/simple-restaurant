@@ -14,11 +14,12 @@ const toggleMenu = () => {
 }
 
 const navLinks = [
-  { name: 'About', href: '#about' },
-  { name: 'Rooms & Suites', href: '#rooms' },
-  { name: 'Dining', href: '#dining' },
-  { name: 'Gallery', href: '#gallery' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'About', href: '/#about' },
+  { name: 'Rooms & Suites', href: '/rooms' },
+  { name: 'Dining', href: '/dining' },
+  { name: 'Wellness & Spa', href: '/spa' },
+  { name: 'Gallery', href: '/#gallery' },
+  { name: 'Contact', href: '/#contact' },
 ]
 </script>
 
@@ -32,25 +33,25 @@ const navLinks = [
     <div class="container mx-auto px-6 md:px-12 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2 group outline-none">
+      <router-link to="/" class="flex items-center gap-2 group outline-none">
         <div class="text-luxury-gold">
           <Hotel class="w-8 h-8 group-hover:-rotate-12 transition-transform duration-300" />
         </div>
         <span class="font-serif text-2xl font-bold tracking-wider text-slate-900 dark:text-white group-hover:text-luxury-gold transition-colors">
           LUMINA
         </span>
-      </a>
+      </router-link>
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-8">
-        <a 
+        <router-link 
           v-for="link in navLinks" 
           :key="link.name" 
-          :href="link.href"
+          :to="link.href"
           class="font-medium text-sm text-slate-800 dark:text-gray-300 hover:text-luxury-gold dark:hover:text-luxury-gold transition-colors"
         >
           {{ link.name }}
-        </a>
+        </router-link>
         
         <button 
           @click="toggleDark()" 
@@ -89,15 +90,15 @@ const navLinks = [
       v-show="isMenuOpen"
       class="absolute top-full left-0 w-full bg-white dark:bg-luxury-surface border-b dark:border-white/10 shadow-lg py-4 px-6 md:hidden flex flex-col gap-4"
     >
-      <a 
+      <router-link 
         v-for="link in navLinks" 
         :key="link.name" 
-        :href="link.href"
+        :to="link.href"
         @click="isMenuOpen = false"
         class="font-medium text-lg text-slate-800 dark:text-gray-300 hover:text-luxury-gold transition-colors py-2 border-b dark:border-white/5 last:border-0"
       >
         {{ link.name }}
-      </a>
+      </router-link>
       <a href="#book" class="bg-luxury-gold text-white px-6 py-3 rounded-sm font-medium tracking-wide text-center mt-2" @click="isMenuOpen = false">
         Book Now
       </a>

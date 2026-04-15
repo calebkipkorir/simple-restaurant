@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -15,37 +15,48 @@ const services = [
     title: "Culinary Experiences",
     description: "Savor exquisite dishes prepared by our Michelin-starred chefs, blending local ingredients with global techniques in a stunning panoramic setting.",
     image: culinaryImg,
-    linkText: "View Menu"
+    linkText: "View Menu",
+    to: "/dining"
   },
   {
     title: "Rooms & Suites",
     description: "Retreat to your private haven. Unwind in opulently designed suites offering breathtaking views, bespoke furnishings, and intuitive smart-room technology.",
     image: roomsImg,
-    linkText: "Explore Rooms"
+    linkText: "Explore Rooms",
+    to: "/rooms"
   },
   {
     title: "Wellness & Spa",
     description: "Rejuvenate mind, body, and soul in our holistic wellness center. Indulge in bespoke treatments, thermal baths, and personalized yoga sessions.",
     image: wellnessImg,
-    linkText: "Discover Spa"
+    linkText: "Discover Spa",
+    to: "/spa"
   }
 ]
+
+let ctx;
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
 
-  gsap.from(cardsRef.value.children, {
-    y: 50,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.2,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: sectionRef.value,
-      start: "top 75%",
-      toggleActions: "play none none reverse"
-    }
+  ctx = gsap.context(() => {
+    gsap.from(cardsRef.value.children, {
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: "top 75%",
+        toggleActions: "play none none reverse"
+      }
+    })
   })
+})
+
+onUnmounted(() => {
+  if (ctx) ctx.revert()
 })
 </script>
 
@@ -69,12 +80,17 @@ onMounted(() => {
           :key="index"
           class="group bg-white dark:bg-luxury-surface border border-slate-100 dark:border-white/5 rounded-sm overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
         >
-          <div class="relative h-64 overflow-hidden">
+          <div class="relative h-64 overflow-hidden bg-slate-200 dark:bg-slate-800 animate-pulse">
+            <!-- Loading indicator background, replaced by image when loaded -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-8 h-8 text-slate-300 dark:text-slate-600 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </div>
             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
             <img 
               :src="service.image" 
               :alt="service.title" 
-              class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+              class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 relative z-10" 
+              onload="this.parentElement.classList.remove('animate-pulse'); this.previousElementSibling.previousElementSibling.style.display='none'"
             />
           </div>
           
@@ -85,10 +101,10 @@ onMounted(() => {
             <p class="text-slate-600 dark:text-gray-400 leading-relaxed mb-8 flex-grow">
               {{ service.description }}
             </p>
-            <a href="#" class="inline-flex items-center gap-2 text-luxury-gold font-medium group/link uppercase text-sm tracking-widest mt-auto">
+            <router-link :to="service.to" class="inline-flex items-center gap-2 text-luxury-gold font-medium group/link uppercase text-sm tracking-widest mt-auto">
               {{ service.linkText }}
               <svg class="w-4 h-4 transform group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

@@ -4,13 +4,6 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './components/layout/Navbar.vue'
 import Footer from './components/layout/Footer.vue'
-import HeroSection from './components/sections/HeroSection.vue'
-import AboutSection from './components/sections/AboutSection.vue'
-import MenuServicesSection from './components/sections/MenuServicesSection.vue'
-import GallerySection from './components/sections/GallerySection.vue'
-import ExperienceSection from './components/sections/ExperienceSection.vue'
-import TestimonialsSection from './components/sections/TestimonialsSection.vue'
-import ContactSection from './components/sections/ContactSection.vue'
 
 // Basic setup
 gsap.registerPlugin(ScrollTrigger)
@@ -29,15 +22,11 @@ onMounted(() => {
   <div class="relative min-h-screen bg-white dark:bg-luxury-dark text-slate-800 dark:text-gray-100 font-sans transition-colors duration-300">
     <Navbar />
     
-    <main class="w-full">
-      <HeroSection />
-      <AboutSection />
-      <MenuServicesSection />
-      <GallerySection />
-      <ExperienceSection />
-      <TestimonialsSection />
-      <ContactSection />
-    </main>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
     
     <Footer />
   </div>
@@ -45,4 +34,13 @@ onMounted(() => {
 
 <style>
 /* Additional global transitions could be placed here if not in main CSS */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

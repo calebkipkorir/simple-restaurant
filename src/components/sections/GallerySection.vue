@@ -8,7 +8,7 @@ import gallery1 from '../../assets/gallery1.avif'
 import gallery2 from '../../assets/gallery2.avif'
 import gallery3 from '../../assets/gallery3.avif'
 import gallery4 from '../../assets/gallery4.avif'
-import gallery5 from '../../assets/gallery5.avif'
+import gallery5 from '../../assets/gallery5.jpg'
 import gallery6 from '../../assets/gallery6.avif'
 
 const sectionRef = ref(null)

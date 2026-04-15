@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import heroImg from '../../assets/hero.avif'
+
 const heroRef = ref(null)
 const overlayRef = ref(null)
 const textRef = ref(null)
@@ -40,7 +42,7 @@ onMounted(() => {
     <div 
       ref="overlayRef" 
       class="absolute inset-0 w-full h-[130%] -top-[15%] bg-cover bg-center bg-no-repeat z-0"
-      style="background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop');"
+      :style="{ backgroundImage: `url(${heroImg})` }"
     ></div>
     
     <!-- Gradient Overlay -->
